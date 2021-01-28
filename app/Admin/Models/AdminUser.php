@@ -7,6 +7,35 @@ use App\Admin\Utils\HasPermissions;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * App\Admin\Models\AdminUser
+ *
+ * @property int $id
+ * @property string $username
+ * @property string $password
+ * @property string $name
+ * @property string|null $avatar
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Admin\Models\AdminPermission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Admin\Models\AdminRole[] $roles
+ * @property-read int|null $roles_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser filter(\App\Admin\Filters\Filter $filter)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\AdminUser whereUsername($value)
+ * @mixin \Eloquent
+ */
 class AdminUser extends Authenticatable
 {
     use HasPermissions;

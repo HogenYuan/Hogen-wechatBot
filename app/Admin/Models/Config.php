@@ -8,6 +8,39 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Throwable;
 
+/**
+ * App\Admin\Models\Config
+ *
+ * @property int $id
+ * @property int $category_id
+ * @property string $type
+ * @property string $name
+ * @property string $slug
+ * @property string|null $desc
+ * @property mixed|null $options 填写配置时的选项，比如单选、多选下拉的选项
+ * @property mixed|null $value
+ * @property string|null $validation_rules 验证规则
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Admin\Models\ConfigCategory $category
+ * @property-read mixed $type_text
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Model filter(\App\Admin\Filters\Filter $filter)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereValidationRules($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Admin\Models\Config whereValue($value)
+ * @mixin \Eloquent
+ */
 class Config extends Model
 {
     const TYPE_INPUT = 'input';

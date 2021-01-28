@@ -16,7 +16,8 @@
         "laravel/ui": "^2.0",
         "mews/captcha": "^3.1",
         "overtrue/laravel-lang": "^3.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.7",
