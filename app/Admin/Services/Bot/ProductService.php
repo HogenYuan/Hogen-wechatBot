@@ -9,34 +9,34 @@ use Exception;
 
 class ProductService extends BaseService
 {
-    public function getProduct()
+    public function getProduct($id)
     {
         $productM = new Product();
-//        $siteM     = new Site();
-//        $sidToRule = [];
+        //        $siteM     = new Site();
+        //        $sidToRule = [];
 
-//        $siteData = $siteM->where('status', Site::STATUS_ONLINE)
-//            ->select('rule,sid')
-//            ->get()
-//            ->toArray();
-//        foreach ($siteData as $site) {
-//            $sidToRule[$site['sid']] = $site['rule'];
-//        }
+        //        $siteData = $siteM->where('status', Site::STATUS_ONLINE)
+        //            ->select('rule,sid')
+        //            ->get()
+        //            ->toArray();
+        //        foreach ($siteData as $site) {
+        //            $sidToRule[$site['sid']] = $site['rule'];
+        //        }
 
         $productData = $productM->where([
-            'pid'     => 4,
+            'pid'     => $id,
             'is_work' => 1,
         ])->get()->toArray();
 
         foreach ($productData as $product) {
-//            $url = str_replace('SKU_REPELACE', $product['sku'], $sidToRule[$product['sid']]);
+            //            $url = str_replace('SKU_REPELACE', $product['sku'], $sidToRule[$product['sid']]);
 
             $url  = $product['product_url'];
             $host = parse_url($url)['host'];
 
             //TODO www.macys.com
             $header = [
-//                'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
+                //                'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
                 'Host: ' . $host,
                 'User-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; 4399Box.560; .NET4.0C; .NET4.0E)',
                 "Accept: */*",
@@ -47,7 +47,7 @@ class ProductService extends BaseService
                 throw new Exception();
             }
             $content = $return['result'];
-//            dd($content);
+            //            dd($content);
             preg_match_all("/window\.\_\_INITIAL_STATE\_\_([\d\D]*?)\<\/script\>/", $content, $matchs);
             if (empty($matchs) || empty($matchs[0])) {
                 //TODO 日志
@@ -65,11 +65,11 @@ class ProductService extends BaseService
             $matchData['_PDP_BOOTSTRAP_DATA'] = json_decode($matchData['_PDP_BOOTSTRAP_DATA'], true);
 
             $checkField   = [
-//                'product_availability_message' => 'status',
+                //                'product_availability_message' => 'status',
                 'product_name'  => 'name',
-//                'product_id'    => 'sku',
+                //                'product_id'    => 'sku',
                 'product_price' => 'price',
-//                'product_brand'                => 'brand',
+                //                'product_brand'                => 'brand',
             ];
             $siteToStatus = [
                 'InStock'                           => Product::IN_STOCK,
@@ -79,9 +79,11 @@ class ProductService extends BaseService
             $insertData = [];
 
             $PDP_BOOTSTRAP_DATA = $matchData['_PDP_BOOTSTRAP_DATA']['utagData'];
-//            dd($matchData);
+            $color = $matchData['_PDP_BOOTSTRAP_DATA']['product']['traits']['colors']['colorMap'];
+            // dd($matchData);
 
             $insertData['sku'] = $matchData['_PDP_BOOTSTRAP_DATA']['product']['id'];
+            $insertData['currency'] = $matchData['_PDP_BOOTSTRAP_DATA']['context']['currencyCode'];
             if ($matchData['_PDP_BOOTSTRAP_DATA']['product']['availability']['available']) {
                 $insertData['status'] = Product::IN_STOCK;
             } else {
@@ -96,21 +98,20 @@ class ProductService extends BaseService
                     throw new Exception();
                     continue;
                 }
-//                if ($field === 'status') {
-//                    $productStatus = $PDP_BOOTSTRAP_DATA[$key][0];
-//                    if (!isset($siteToStatus[$productStatus])) {
-//                        //TODO 日志
-//                        throw new Exception();
-//                        continue;
-//                    }
-//                    $insertData[$field] = $siteToStatus[$productStatus];
-//                } else {
+                //                if ($field === 'status') {
+                //                    $productStatus = $PDP_BOOTSTRAP_DATA[$key][0];
+                //                    if (!isset($siteToStatus[$productStatus])) {
+                //                        //TODO 日志
+                //                        throw new Exception();
+                //                        continue;
+                //                    }
+                //                    $insertData[$field] = $siteToStatus[$productStatus];
+                //                } else {
                 $insertData[$field] = $PDP_BOOTSTRAP_DATA[$key][0];
-//                }
+                //                }
             }
 
             dd($insertData);
-
         }
     }
 
@@ -120,7 +121,7 @@ class ProductService extends BaseService
             'http' => [
                 'method' => "GET",
                 'header' => "Host: " . $url . "\r\n" .
-//                    "Accept-language: zh-cn\r\n" .
+                    //                    "Accept-language: zh-cn\r\n" .
                     "User-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; 4399Box.560; .NET4.0C; .NET4.0E)\r\n" .
                     "Accept: *//*\r\n" .
                     "Accept-Encoding: gzip, deflate, br",
@@ -131,16 +132,16 @@ class ProductService extends BaseService
 
 
         //            $auth = base64_encode("LOGIN:PASSWORD");   //LOGIN:PASSWORD 这里是代理服务器的账户名及密码
-//            $context = [
-//                'http' => [
-//                    'proxy'           => 'tcp://35.226.62.64:80',
-////                    'proxy' => 'tcp://192.168.0.2:3128',  //这里设置你要使用的代理ip及端口号
-//                    'request_fulluri' => true,
-//                    'header' => "Proxy-Authorization: Basic $auth",
-//                ],
-//            ];
-//            $context = stream_context_create($context);
-//        $content = file_get_contents($url, false, $context);
-//        return $context;
+        //            $context = [
+        //                'http' => [
+        //                    'proxy'           => 'tcp://35.226.62.64:80',
+        ////                    'proxy' => 'tcp://192.168.0.2:3128',  //这里设置你要使用的代理ip及端口号
+        //                    'request_fulluri' => true,
+        //                    'header' => "Proxy-Authorization: Basic $auth",
+        //                ],
+        //            ];
+        //            $context = stream_context_create($context);
+        //        $content = file_get_contents($url, false, $context);
+        //        return $context;
     }
 }

@@ -9,7 +9,8 @@ class ProductController extends BotBaseController
 {
     public function getProduct(Request $request, ProductService $service)
     {
-        $res = $service->getProduct();
+        $id = $request->get('pid', 1);
+        $res = $service->getProduct($id);
         if (!$res) {
             return $this->error($res);
         }
