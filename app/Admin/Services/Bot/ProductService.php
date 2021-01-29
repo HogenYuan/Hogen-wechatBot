@@ -64,27 +64,22 @@ class ProductService extends BaseService
 
             $matchData['_PDP_BOOTSTRAP_DATA'] = json_decode($matchData['_PDP_BOOTSTRAP_DATA'], true);
 
-            $checkField   = [
-                //                'product_availability_message' => 'status',
+            $checkField = [
                 'product_name'  => 'name',
-                //                'product_id'    => 'sku',
                 'product_price' => 'price',
-                //                'product_brand'                => 'brand',
             ];
-            $siteToStatus = [
-                'InStock'                           => Product::IN_STOCK,
-                'Thisproductiscurrentlyunavailable' => Product::OUT_OF_STOCK,
-            ];
-
             $insertData = [];
 
-            $PDP_BOOTSTRAP_DATA = $matchData['_PDP_BOOTSTRAP_DATA']['utagData'];
-            $color = $matchData['_PDP_BOOTSTRAP_DATA']['product']['traits']['colors']['colorMap'];
-            // dd($matchData);
+            $pdpBootstrapData = $matchData['_PDP_BOOTSTRAP_DATA'];
+            $utagData         = $pdpBootstrapData['utagData'];
+            $product          = $pdpBootstrapData['product'];
 
-            $insertData['sku'] = $matchData['_PDP_BOOTSTRAP_DATA']['product']['id'];
-            $insertData['currency'] = $matchData['_PDP_BOOTSTRAP_DATA']['context']['currencyCode'];
-            if ($matchData['_PDP_BOOTSTRAP_DATA']['product']['availability']['available']) {
+            $patternList = $product['traits']['colors']['colorMap'];
+            dd($matchData);
+
+            $insertData['sku']      = $product['id'];
+            $insertData['currency'] = $pdpBootstrapData['context']['currencyCode'];
+            if ($product['availability']['available']) {
                 $insertData['status'] = Product::IN_STOCK;
             } else {
                 $insertData['status'] = Product::OUT_OF_STOCK;
@@ -92,26 +87,22 @@ class ProductService extends BaseService
 
 
             foreach ($checkField as $key => $field) {
-                if (empty($PDP_BOOTSTRAP_DATA[$key])) {
+                if (empty($utagData[$key])) {
                     //TODO 日志
-                    dd($PDP_BOOTSTRAP_DATA);
+                    dd($utagData);
                     throw new Exception();
                     continue;
                 }
-                //                if ($field === 'status') {
-                //                    $productStatus = $PDP_BOOTSTRAP_DATA[$key][0];
-                //                    if (!isset($siteToStatus[$productStatus])) {
-                //                        //TODO 日志
-                //                        throw new Exception();
-                //                        continue;
-                //                    }
-                //                    $insertData[$field] = $siteToStatus[$productStatus];
-                //                } else {
-                $insertData[$field] = $PDP_BOOTSTRAP_DATA[$key][0];
-                //                }
+                $insertData[$field] = $utagData[$key][0];
+                //TODO 遍历patternList
+                foreach ($patternList as $pattern) {
+                    //TODO 添加到pattern表 比较有没有添加
+                    $getPatternList[] = [];
+                }
+                //TODO 更新到product表
             }
 
-            dd($insertData);
+            dd($utagData);
         }
     }
 
